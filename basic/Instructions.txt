@@ -1,0 +1,8 @@
+====Compiling====
+./build_fortran.sh
+
+====Tests====
+./runTest.sh
+
+Or to make from Jupyter files
+./createAndRunTests.sh 
