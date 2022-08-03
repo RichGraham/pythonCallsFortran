@@ -5,14 +5,15 @@ import numpy as np
 fortlib = ct.CDLL('src_fortran/myflib.so')
 f = fortlib.double_array
 
-# Specify arguments type as a pointer to double and an integer
-f.argtypes=[ct.POINTER(ct.c_double), ct.c_int]
+# Specify arguments type as a pointer to double and two integers
+f.argtypes=[ct.POINTER(ct.c_double), ct.POINTER(ct.c_double),ct.c_int, ct.c_int]
 
-def callFunction():
+def callFunction(x):
     # Create a double array, pass it to Fortran as a pointer
-    x = np.ones((3,3), order="F")
+    y = x.copy()
     x_ptr = x.ctypes.data_as(ct.POINTER(ct.c_double))
+    y_ptr = y.ctypes.data_as(ct.POINTER(ct.c_double))
 
     # Call function
-    rint = f(x_ptr, ct.c_int(3))
-    return x
+    rint = f(x_ptr, y_ptr, ct.c_int(x.shape[0]), ct.c_int(x.shape[1]))
+    return y
